@@ -1,0 +1,34 @@
+.main-container {
+  height: 100vh;
+  width: 100%;
+  padding-block: var(--block-padding);
+  position: relative;
+  box-sizing: border-box;
+}
+
+.array-name {
+  width: 100%;
+  content: attr(data-name);
+  font-size: 1.2rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: white;
+  text-align: center;
+  position: absolute;
+  top: var(--block-padding);
+  left: 0;
+  transform: translateY(-100%);
+}
+
+.inner-container {
+  height: fit-content;
+  max-height: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding-inline: 3rem;
+  gap: 2rem;
+  scrollbar-color: var(--border-color) #ffffff08;
+}
