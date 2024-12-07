@@ -86,10 +86,10 @@ const props = defineProps<{
 }
 .register-idx {
   position: absolute;
-  top: 50%;
-  left: 0;
-  transform: translate(-3rem, -50%);
   padding: 0;
   margin: 0;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>
