@@ -9,9 +9,12 @@
           :register="register"
         />
       </div>
-      <div class="empty-regs" :style="`height: ${registers.length === 0 ? 'auto' : 0}; --sibling-count:${5}`">
+      <div class="empty-regs" 
+        :style="`height: ${registers.length === 0 ? 'auto' : 0}; --sibling-count:${6}; padding-top: ${registers.length === 0 ? '2rem' : ''};`"
+      >
         <!--<div v-for="i in [1,2,3]" :key="i" class="empty-data"> &#8734; </div>-->
-        <div v-for="i in [1,2,3,4,5]" :key="i" class="empty-data" :style="`--sibling-index:${i}`"> { } </div>
+        <!--<div v-for="i in [1,2,3,4,5]" :key="i" class="empty-data" :style="`--sibling-index:${i}`"> { } </div>-->
+        <div v-for="i in [1,2,3,4,5,6]" :key="i" class="empty-data" :style="`--sibling-index:${i}`"> &empty; </div>
       </div>
     </div>
   </div>
@@ -35,7 +38,7 @@ const props = defineProps<{
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 .empty-regs {
@@ -44,7 +47,7 @@ const props = defineProps<{
   flex-direction: column;
   //justify-content: center;
   align-items: stretch;
-  gap: 2rem;
+  gap: 32px;
 }
 .empty-data{
   position: relative;

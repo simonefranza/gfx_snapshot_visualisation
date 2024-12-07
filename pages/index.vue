@@ -55,10 +55,10 @@ function addProcess() {
 
   display: grid;
   grid-template-areas: "proc a1 a2 code";
-  grid-template-columns: 2fr 2fr 2.5fr 3fr;
+  grid-template-columns: 2fr 1fr 1fr 2fr;
   justify-items: center;
   align-content: stretch;
-  --block-padding: 4rem;
+  --block-padding: 32px;
   gap: 2rem;
 }
 </style>

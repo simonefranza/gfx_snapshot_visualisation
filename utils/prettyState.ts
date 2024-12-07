@@ -1,9 +1,7 @@
 import {EState} from "../types/state";
 export default function(state: EState) {
-  console.log('state', state);
   switch (state) {
     case EState.IDLE:
-      console.log('idle', state, EState.IDLE);
       return "IDLE";
     case EState.WRITE:
       return "WRITE";

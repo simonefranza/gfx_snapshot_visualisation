@@ -29,15 +29,18 @@ const emit = defineEmits<{
 }>();
 const gfxRegisters: Ref<IRegister[]> = inject<Ref<IRegister[]>>("A2");
 const snapRegisters: Ref<IRegister[]> = inject<Ref<IRegister[]>>("A3");
-const snapKnown : Ref<ShallowSet> = ref(new ShallowSet());
+const known : Ref<ShallowSet> = ref(new ShallowSet());
+const notKnown : Ref<number[]> = ref([]);
 const oldNbParticipant : Ref<number> = ref(0);
 const nbParticipant : Ref<number> = ref(0);
+const toWrite : Ref<IDataEntry | null> = ref(null);
 const state: Ref<EState> = ref(EState.IDLE);
-const proc = new ProcessSnap(props.id, state, snapKnown, oldNbParticipant, nbParticipant, gfxRegisters, snapRegisters);
+const proc = new ProcessSnap(props.id, state, known, notKnown, toWrite,
+  oldNbParticipant, nbParticipant, gfxRegisters, snapRegisters);
 const userInput : Ref<string>= ref("");
 
 function activate() {
-  emit('activate', {state, oldNbParticipant, nbParticipant, known: snapKnown});
+  emit('activate', {state, toWrite, oldNbParticipant, nbParticipant, known, notKnown});
 }
 
 function writeFact() {
@@ -67,13 +70,15 @@ onMounted(() => {
 }
 .proc-element {
   width: 80px;
-  height: 80px;
+  height: fit-content;
   border: 2px solid var(--border-color);
   text-align: center;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
+  gap: 1rem;
+  padding: 10px;
   border-radius: 10px;
   &.glow {
     box-shadow: 0 0 10px 1px var(--glow-color);

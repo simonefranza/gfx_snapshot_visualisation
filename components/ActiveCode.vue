@@ -1,70 +1,84 @@
 <template>
   <div class="main-container">
     <div class="array-name">Pseudo Code</div>
-    <div :class="['code-block', {'highlight' : getState() == EState.IDLE}]" >
-      <label>IDLE</label>
+    <div class="code-container">
+      <div class="inner-container no-gap">
+      <div :class="['code-block', {'highlight' : getState() == EState.IDLE}]" >
+        <label>IDLE</label>
+      </div>
+      <div :class="['code-block', {'highlight' : getState() == EState.INIT}]" >
+        <label>INIT</label>
+        <pre>
+<b>variables</b> A1 = [ i &#8712 Nat -> {} ],
+          A2 = [ i &#8712 Nat -> {} ],
+          known = {self},
+          notKnown = {},
+          oldNbParticipant = 0,
+          nbParticipant = 0;
+      </pre>
     </div>
     <div :class="['code-block', {'highlight' : getState() == EState.GFXa}]" >
       <label>GFXa</label>
+      <pre>
+known := known &cup; NUnion(A1);
+notKnown := { i &#8712; 0 .. (|known|) :
+                 known != A1[i] };
+
+<b>if</b> ( notKnown == {} )
+    A1[|known| - 1] = known
+    known := {};
+    notKnown := {};
+    <b>goto</b> SNAPb;
+      </pre>
     </div>
     <div :class="['code-block', {'highlight' : getState() == EState.GFXb}]" >
       <label>GFXb</label>
+      <pre>
+<b>with</b>( i &#8712; notKnown )
+    { A1[i] := known }
+
+<b>goto</b> GFXa
+      </pre>
     </div>
     <div :class="['code-block', {'highlight' : getState() == EState.SNAPb}]" >
       <label>SNAPb</label>
+      <pre>
+<b>while</b> ( TRUE )
+    known := newFact &cup; known;
+    nbParticipant := |NUnion(A1)|;
+      </pre>
     </div>
     <div :class="['code-block', {'highlight' : getState() == EState.SNAPc}]" >
       <label>SNAPc</label>
+      <pre>
+    oldNbParticipant := nbParticipant;
+
+    known := known &cup; NUnion(A2);
+    notKnown := { i &#8712 0 .. (nbParticipant - 1) :
+                      known != A2[i] };
+    <b>if</b> ( notKnown == {} )
+        <b>goto</b> SNAPe
+      </pre>
     </div>
     <div :class="['code-block', {'highlight' : getState() == EState.SNAPd}]" >
       <label>SNAPd</label>
+      <pre>
+    <b>with</b> ( i &#8712 notKnown )
+        { A2[i] := known }
+
+    <b>goto</b> SNAPc
+      </pre>
     </div>
     <div :class="['code-block', {'highlight' : getState() == EState.SNAPe}]" >
       <label>SNAPe</label>
-    </div>
-    <div class="code-container">
-      <div class="inner-container">
+      <pre>
+    nbParticipant := |NUnion(A1)|;
+
+    <b>if</b> ( oldNbParticipant == nbParticipant )
+        <b>return</b> known;
+
+    <b>goto</b> SNAPc</pre>
       </div>
-    </div>
-    <div class="array-name mid" v-if="state !== null">P{{ activeProcess + 1 }} State</div>
-    <div class="code-container" v-if="state !== null">
-      <div class="inner-container wide">
-        <span >
-          <span class="data-line">
-            <label>
-              State
-            </label>
-            <span class="data" v-if="state">
-              {{ prettyState(state.state.value) }}
-            </span>
-          </span>
-          <span class="data-line">
-            <label>
-              Old Nr. Participants:
-            </label>
-            <span class="data">
-              {{ state.oldNbParticipant }}
-            </span>
-          </span>
-          <span class="data-line">
-            <label>
-              Current Nr. Participants:
-            </label>
-            <span class="data">
-              {{ state.nbParticipant }}
-            </span>
-          </span>
-          <span class="data-line">
-            <label>
-              Known Facts:
-            </label>
-            <span class="data">
-              <div v-for="data, idx in sortArrayData(getKnown())" :key="idx">
-                {{ formatArrayData(data) }}
-              </div>
-            </span>
-          </span>
-        </span>
       </div>
     </div>
   </div>
@@ -75,59 +89,21 @@ import { EState } from '~/types/state';
 
 const props = defineProps<{
   state: IRunningState | null,
-  activeProcess: number,
 }>();
 function getState() {
   return props.state?.state.value;
-}
-function getKnown() {
-  if (!props.state.known) return [];
-  const values = Array.from(props.state.known.value);
-  console.log(props.state.known);
-  console.log('test');
-  console.log(values);
-
-  values.forEach((item, index) => {
-    console.log(`Value ${index}:`, item);
-  });
-  return values;
-  //return values.map(item => this.removeCircularRefs(item));
-}
-function findCircularReferences(obj) {
-  const seen = new WeakSet();
-
-  function detect(obj) {
-    if (typeof obj !== 'object' || obj === null) {
-      return false;
-    }
-    if (seen.has(obj)) {
-      console.log(obj);
-      return true;
-    }
-    seen.add(obj);
-
-    for (const key in obj) {
-      if (Object.prototype.hasOwnProperty.call(obj, key) && detect(obj[key])) {
-        console.log(key);
-        return true;
-      }
-    }
-    return false;
-  }
-
-  return detect(obj);
 }
 </script>
 
 <style scoped lang="scss">
 .code-container {
-  height: auto;
+  height: 100%;
   position: relative;
   grid-area: code;
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 1rem;
   color: var(--light-text);
@@ -152,23 +128,33 @@ label {
 .data {
   text-align: left;
 }
+.inner-container.no-gap {
+  padding-inline: 0 2rem;
+  gap:0;
+}
 .inner-container.wide {
   width: 100%;
   box-sizing: border-box;
 }
 .code-block {
   --margin: 3rem;
-  width: calc(100% - 2 * var(--margin));
+  width: auto;
   background: transparent;
   color: var(--light-text);
-  margin-inline: var(--margin);
-
+  margin-inline: 0;
+  display: grid;
+  grid-template-columns: 8ch auto;
+  border-radius: 5px;
+  padding: 0 5px;
   &.highlight {
     background: #ffffff22;
-
   }
   & label {
     text-transform: unset;
   }
+& pre {
+  margin: 0;
+
+}
 }
 </style>

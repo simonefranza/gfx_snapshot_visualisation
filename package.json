@@ -7,10 +7,11 @@
     "dev": "NUXT_APP_BASE_URL=/ nuxt dev --host",
     "clean:dsstore": "find . -name '.DS_Store' -type f -delete",
     "generate": "npm run clean:dsstore && NUXT_APP_BASE_URL=/ nuxt generate",
-    "generateDemo": "npm run clean:dsstore && NUXT_APP_BASE_URL=/demo/trueb/ nuxt generate --no-clean",
+    "generateGHPages": "npm run clean:dsstore && NUXT_APP_BASE_URL=/gfx_snapshot_visualisation/ nuxt generate",
     "generateLocal": "NUXT_APP_BASE_URL=/taserbeam/ nuxt generate --no-clean",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "deploy": "sh deploy.sh"
   },
   "dependencies": {
     "nuxt": "^3.14.1592",
