@@ -7,7 +7,7 @@
     "dev": "NUXT_APP_BASE_URL=/ nuxt dev --host",
     "clean:dsstore": "find . -name '.DS_Store' -type f -delete",
     "generate": "npm run clean:dsstore && NUXT_APP_BASE_URL=/ nuxt generate",
-    "generateGHPages": "npm run clean:dsstore && NUXT_APP_BASE_URL=/gfx_snapshot_visualisation/ nuxt generate",
+    "generateGHPages": "npm run clean:dsstore && NUXT_APP_BASE_URL=/gfx_snapshot_visualisation/ nuxt build --preset github_pages",
     "generateLocal": "NUXT_APP_BASE_URL=/taserbeam/ nuxt generate --no-clean",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
