@@ -1,48 +1,28 @@
 <template>
   <div class="register-container" >
-    {{register.idx}}
+    <p class="register-idx">{{register.idx}}</p>
     <div class="data">
       <div class="corner top left"></div>
       <div class="corner top right"></div>
       <div class="corner bottom left"></div>
       <div class="corner bottom right"></div>
-      <p v-for="el,idx in sortData(register.data)"
-        :key="idx">{{formatData(el)}}</p>
+      <p v-for="el,idx in sortArrayData(register.data)"
+        :key="idx">{{formatArrayData(el)}}</p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { sortArrayData } from "../utils/sortArrayData";
 const props = defineProps<{
   register: IRegister
 }>();
 
-function sortData(data: Set<IDataEntry>) {
-  return Array(...data).sort((a, b) => {
-    if (a.proc != b.proc) {
-      return a.proc < b.proc ? -1 : 1;
-    }
-    return a.nbWrite - b.nbWrite;
-  });
-
-}
-
-function formatData(el: IDataEntry) {
-  let str = "[";
-  str += el.proc;
-  if ('nbWrite' in el) {
-    str += ', ' + el.nbWrite.toString();
-  }
-  if ('data' in el) {
-    str += ', ' + el.data;
-  }
-
-  return str + ']';
-}
 </script>
 
 <style scoped lang="scss">
 .register-container {
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -55,23 +35,13 @@ function formatData(el: IDataEntry) {
   width: fit-content;
   min-width: 80px;
   color: var(--light-text);
-  text-align: center;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 10px;
   flex-wrap: wrap;
   align-items: center;
-  --s: 50px; /* the size on the corner */
-  padding: 30px; /* the gap between the border and image */
-//  -webkit-mask:
-//    conic-gradient(at var(--s) var(--s),#0000 75%,#000 0)
-//    0 0/calc(100% - var(--s)) calc(100% - var(--s)),
-//    linear-gradient(#000 0 0) content-box;
-//  mask:
-//    conic-gradient(at var(--s) var(--s),#0000 75%,#000 0)
-//    0 0/calc(100% - var(--s)) calc(100% - var(--s)),
-//    linear-gradient(#000 0 0) content-box;
+  padding: 18px; /* the gap between the border and image */
   & p {
     margin: 0;
   }
@@ -80,8 +50,8 @@ function formatData(el: IDataEntry) {
   position: absolute;
   border: 0px solid var(--border-color);
   --border-size: 2px;
-  --border-length: 40px;
-  --border-radius: 10px;
+  --border-length: 20px;
+  --border-radius: 7px;
   //border-radius: 10px;
   width: var(--border-length);
   height: var(--border-length);
@@ -113,5 +83,13 @@ function formatData(el: IDataEntry) {
 }
 .bottom.right{
   border-bottom-right-radius: var(--border-radius);
+}
+.register-idx {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate(-3rem, -50%);
+  padding: 0;
+  margin: 0;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="main-container">
+  <div class="main-container procs-container">
     <div class="array-name">Processes</div>
     <div class="processes">
       <div class="inner-container">
@@ -9,29 +9,36 @@
           :id="proc.id"
           :active="idx === activeProcess"
           ref="processesEl"
-          @activate="emit('clicked', idx)"
+          @activate="(state) => emit('clicked', idx, state)"
         ></process>
-        <button
-          class="add-proc-btn"
-          @click="emit('addProcess')"
-        >+</button>
+        <div class="btn-container">
+          <button
+            class="add-proc-btn"
+            @click="emit('addProcess')"
+          >+</button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import type { IRunningState } from '~/types/runningState';
+
 const props = defineProps<{
   processes: IProcess[],
   activeProcess: number
 }>();
 const emit = defineEmits<{
-  (e: 'clicked', idx: number) : void,
+  (e: 'clicked', idx: number, state: IRunningState) : void,
   (e: 'addProcess') : void,
 }>();
 </script>
 
 <style scoped lang="scss">
+.procs-container {
+  grid-area: proc;
+}
 .processes {
   height: 100%;
   overflow-y: auto;
@@ -56,5 +63,10 @@ const emit = defineEmits<{
   font-size: 2rem;
   color: rgba(2, 21, 31, 1);
   cursor: pointer;
+}
+.btn-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
