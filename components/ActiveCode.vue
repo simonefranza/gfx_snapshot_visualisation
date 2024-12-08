@@ -11,6 +11,8 @@
         <pre>
 <b>variables</b> A1 = [ i &#8712 Nat -> {} ],
           A2 = [ i &#8712 Nat -> {} ],
+          myVals = {},
+          out = {},
           known = {self},
           notKnown = {},
           oldNbParticipant = 0,
@@ -34,8 +36,7 @@ notKnown := { i &#8712; 0 .. (|known|) :
     <div :class="['code-block', {'highlight' : getState() == EState.GFXb}]" >
       <label>GFXb</label>
       <pre>
-<b>with</b>( i &#8712; notKnown )
-    { A1[i] := known }
+<b>with</b>( i &#8712; notKnown ) { A1[i] := known }
 
 <b>goto</b> GFXa
       </pre>
@@ -44,7 +45,8 @@ notKnown := { i &#8712; 0 .. (|known|) :
       <label>SNAPb</label>
       <pre>
 <b>while</b> ( TRUE )
-    known := newFact &cup; known;
+    <b>with</b> ( v &#8712 Val ) { myVals := myVals &cup; {v} };
+    known := myVals &cup; known;
     nbParticipant := |NUnion(A1)|;
       </pre>
     </div>
@@ -63,8 +65,7 @@ notKnown := { i &#8712; 0 .. (|known|) :
     <div :class="['code-block', {'highlight' : getState() == EState.SNAPd}]" >
       <label>SNAPd</label>
       <pre>
-    <b>with</b> ( i &#8712 notKnown )
-        { A2[i] := known }
+    <b>with</b> ( i &#8712 notKnown ) { A2[i] := known }
 
     <b>goto</b> SNAPc
       </pre>
@@ -75,9 +76,9 @@ notKnown := { i &#8712; 0 .. (|known|) :
     nbParticipant := |NUnion(A1)|;
 
     <b>if</b> ( oldNbParticipant == nbParticipant )
-        <b>return</b> known;
-
-    <b>goto</b> SNAPc</pre>
+        out := known;
+    <b>else</b>
+        <b>goto</b> SNAPc</pre>
       </div>
       </div>
     </div>

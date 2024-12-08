@@ -17,7 +17,10 @@ export class ShallowSet extends Set {
     }
     return super.add(data);
   }
-  override has(test: IDataEntry) {
+  override has(test: IDataEntry | null) {
+    if (!test) {
+      return false;
+    }
     for (const item of this) {
       if (this.isShallowMatch(item, test)) {
         return true;

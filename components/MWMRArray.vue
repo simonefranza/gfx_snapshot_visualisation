@@ -9,11 +9,9 @@
           :register="register"
         />
       </div>
-      <div class="empty-regs" 
+      <div class="empty-regs"
         :style="`height: ${registers.length === 0 ? 'auto' : 0}; --sibling-count:${6}; padding-top: ${registers.length === 0 ? '2rem' : ''};`"
       >
-        <!--<div v-for="i in [1,2,3]" :key="i" class="empty-data"> &#8734; </div>-->
-        <!--<div v-for="i in [1,2,3,4,5]" :key="i" class="empty-data" :style="`--sibling-index:${i}`"> { } </div>-->
         <div v-for="i in [1,2,3,4,5,6]" :key="i" class="empty-data" :style="`--sibling-index:${i}`"> &empty; </div>
       </div>
     </div>

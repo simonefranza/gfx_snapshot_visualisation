@@ -13,6 +13,7 @@ export class ProcessSnap {
   oldNbParticipants: Ref<number>;
   nbParticipants: Ref<number>;
   state: Ref<EState>;
+  ranGFX: boolean = false;
 
   constructor(id: string, state: Ref<EState>, known: Ref<ShallowSet>, notKnown: Ref<number[]>,
     toWrite: Ref<IDataEntry | null>,
@@ -51,7 +52,11 @@ export class ProcessSnap {
         } else {
           this.toWrite.value = null;
         }
-        this.state.value = EState.INIT;
+        this.state.value = this.ranGFX ? EState.SNAPb : EState.INIT;
+        if (this.state.value === EState.INIT) {
+          this.run();
+        }
+        break;
       case EState.INIT:
         console.log("init");
         this.init();
@@ -104,7 +109,7 @@ export class ProcessSnap {
     // Find registers that do not match the current known set
     this.notKnown.value = [];
     const emptySet = new ShallowSet();
-    for (let i = 0; i < this.known.value.size; i++) {
+    for (let i = 0; i <= this.known.value.size; i++) {
       const testSet = i >= this.A2.value.length ? emptySet : this.A2.value[i].data;
       if (!this.setEquals(testSet, this.known.value)) {
         this.notKnown.value.push(i);
@@ -131,6 +136,7 @@ export class ProcessSnap {
   }
 
   snapB() {
+    this.ranGFX = true;
     this.known.value.add(this.toWrite.value);
     this.nbParticipants.value = this.countParticipants();
 
@@ -184,7 +190,7 @@ export class ProcessSnap {
 
     if (index >= array.length) {
       array.push({
-        idx: index + 1,
+        idx: index,
         data: value
       });
     } else {
