@@ -2,6 +2,7 @@ import { EState } from '~/types/state';
 import { ShallowSet } from './ShallowSet';
 export class ProcessSnap {
 
+  A1: Ref<IRegister[]>;
   A2: Ref<IRegister[]>;
   A3: Ref<IRegister[]>;
   id: string;
@@ -17,8 +18,10 @@ export class ProcessSnap {
 
   constructor(id: string, state: Ref<EState>, known: Ref<ShallowSet>, notKnown: Ref<number[]>,
     toWrite: Ref<IDataEntry | null>,
-    oldNbParticipant: Ref<number>, nbParticipant: Ref<number>, a2: Ref<IRegister[]>, a3: Ref<IRegister[]>) {
+    oldNbParticipant: Ref<number>, nbParticipant: Ref<number>,
+    a1: Ref<IRegister[]>, a2: Ref<IRegister[]>, a3: Ref<IRegister[]>) {
     this.id = id;
+    this.A1 = a1; // Shared array to track participants (from GFX)
     this.A2 = a2; // Shared array to track participants (from GFX)
     this.A3 = a3; // Shared array for the SnapShot repository
     this.oldNbParticipants = oldNbParticipant;
@@ -101,7 +104,7 @@ export class ProcessSnap {
   // GFX: Determines the set of participants
   gfxA() {
     // Aggregate known participants from A2
-    let allSets = this.A2.value.map(set => new ShallowSet(set.data)); // Deep copy
+    let allSets = this.A1.value.map(set => new ShallowSet(set.data)); // Deep copy
     for (let set of allSets) {
       this.known.value = new ShallowSet([...this.known.value, ...set]);
     }
@@ -110,7 +113,7 @@ export class ProcessSnap {
     this.notKnown.value = [];
     const emptySet = new ShallowSet();
     for (let i = 0; i <= this.known.value.size; i++) {
-      const testSet = i >= this.A2.value.length ? emptySet : this.A2.value[i].data;
+      const testSet = i >= this.A1.value.length ? emptySet : this.A1.value[i].data;
       if (!this.setEquals(testSet, this.known.value)) {
         this.notKnown.value.push(i);
       }
@@ -131,7 +134,7 @@ export class ProcessSnap {
     if (this.notKnown.value.length === 0) {
       throw new Error("notKnown should not be empty in GFXb");
     }
-    this.writeToArray(this.A2.value, this.notKnown.value[0], new ShallowSet(this.known.value));
+    this.writeToArray(this.A1.value, this.notKnown.value[0], new ShallowSet(this.known.value));
     this.state.value = EState.GFXa;
   }
 

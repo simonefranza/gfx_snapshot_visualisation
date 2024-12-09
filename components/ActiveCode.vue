@@ -11,6 +11,7 @@
         <pre>
 <b>variables</b> A1 = [ i &#8712 Nat -> {} ],
           A2 = [ i &#8712 Nat -> {} ],
+          A3 = [ i &#8712 Nat -> {} ],
           myVals = {},
           out = {},
           known = {self},
@@ -27,7 +28,7 @@ notKnown := { i &#8712; 0 .. (|known|) :
                  known != A1[i] };
 
 <b>if</b> ( notKnown == {} )
-    A1[|known| - 1] = known
+    A2[|known| - 1] = known
     known := {};
     notKnown := {};
     <b>goto</b> SNAPb;
@@ -47,7 +48,7 @@ notKnown := { i &#8712; 0 .. (|known|) :
 <b>while</b> ( TRUE )
     <b>with</b> ( v &#8712 Val ) { myVals := myVals &cup; {v} };
     known := myVals &cup; known;
-    nbParticipant := |NUnion(A1)|;
+    nbParticipant := |NUnion(A2)|;
       </pre>
     </div>
     <div :class="['code-block', {'highlight' : getState() == EState.SNAPc}]" >
@@ -55,9 +56,9 @@ notKnown := { i &#8712; 0 .. (|known|) :
       <pre>
     oldNbParticipant := nbParticipant;
 
-    known := known &cup; NUnion(A2);
+    known := known &cup; NUnion(A3);
     notKnown := { i &#8712 0 .. (nbParticipant - 1) :
-                      known != A2[i] };
+                      known != A3[i] };
     <b>if</b> ( notKnown == {} )
         <b>goto</b> SNAPe
       </pre>
@@ -73,7 +74,7 @@ notKnown := { i &#8712; 0 .. (|known|) :
     <div :class="['code-block', {'highlight' : getState() == EState.SNAPe}]" >
       <label>SNAPe</label>
       <pre>
-    nbParticipant := |NUnion(A1)|;
+    nbParticipant := |NUnion(A2)|;
 
     <b>if</b> ( oldNbParticipant == nbParticipant )
         out := known;

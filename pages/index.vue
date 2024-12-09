@@ -6,8 +6,9 @@
       @clicked="activate"
       @add-process="addProcess"
     />
-    <MWMRArray area="a1" name="Array 1" :registers="A2"/>
-    <MWMRArray area="a2" name="Array 2" :registers="A3"/>
+    <MWMRArray area="a1" name="Array 1" :registers="A1"/>
+    <MWMRArray area="a2" name="Array 2" :registers="A2"/>
+    <MWMRArray area="a3" name="Array 3" :registers="A3"/>
     <ActiveCode :activeProcess="activeProcess" :state="getRunningState"/>
   </div>
 </template>
@@ -18,8 +19,10 @@ import type { EState } from '~/types/state';
 const processes = ref<IProcess[]>([]);
 const processesEl = ref<typeof process[]>([]);
 const lastIdx = ref(0);
+const A1 = ref<IRegister[]>([]);
 const A2 = ref<IRegister[]>([]);
 const A3 = ref<IRegister[]>([]);
+provide('A1', A1);
 provide('A2', A2);
 provide('A3', A3);
 const activeProcess = ref(-1);
@@ -54,8 +57,8 @@ function addProcess() {
   background: linear-gradient(279deg, rgba(0,5,6,1) 0%, rgba(2,21,31,1) 100%);
 
   display: grid;
-  grid-template-areas: "proc a1 a2 code";
-  grid-template-columns: 2fr 1fr 1fr 2fr;
+  grid-template-areas: "proc a1 a2 a3 code";
+  grid-template-columns: 2fr 1fr 1fr 1fr 2fr;
   justify-items: center;
   align-content: stretch;
   --block-padding: 32px;

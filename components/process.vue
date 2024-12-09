@@ -27,7 +27,8 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'activate', state: IRunningState) : void,
 }>();
-const gfxRegisters: Ref<IRegister[]> = inject<Ref<IRegister[]>>("A2");
+const gfxRegisters: Ref<IRegister[]> = inject<Ref<IRegister[]>>("A1");
+const participantsRegisters: Ref<IRegister[]> = inject<Ref<IRegister[]>>("A2");
 const snapRegisters: Ref<IRegister[]> = inject<Ref<IRegister[]>>("A3");
 const known : Ref<ShallowSet> = ref(new ShallowSet());
 const notKnown : Ref<number[]> = ref([]);
@@ -36,7 +37,7 @@ const nbParticipant : Ref<number> = ref(0);
 const toWrite : Ref<IDataEntry | null> = ref(null);
 const state: Ref<EState> = ref(EState.IDLE);
 const proc = new ProcessSnap(props.id, state, known, notKnown, toWrite,
-  oldNbParticipant, nbParticipant, gfxRegisters, snapRegisters);
+  oldNbParticipant, nbParticipant, gfxRegisters, participantsRegisters, snapRegisters);
 const userInput : Ref<string>= ref("");
 
 function activate() {
