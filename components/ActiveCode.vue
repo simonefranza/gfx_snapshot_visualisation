@@ -66,7 +66,7 @@ notKnown := { i &#8712; 0 .. (|known|) :
     <div :class="['code-block', {'highlight' : getState() == EState.SNAPd}]" >
       <label>SNAPd</label>
       <pre>
-    <b>with</b> ( i &#8712 notKnown ) { A2[i] := known }
+    <b>with</b> ( i &#8712 notKnown ) { A3[i] := known }
 
     <b>goto</b> SNAPc
       </pre>

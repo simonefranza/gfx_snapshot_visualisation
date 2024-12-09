@@ -187,8 +187,12 @@ export class ProcessSnap {
   }
 
   writeToArray(array: IRegister[], index: number, value: ShallowSet) {
-    if (index > array.length) {
-      throw new Error(`Index is too big? ${index} vs ${array.length}`);
+    while (index > array.length) {
+      //throw new Error(`Index is too big? ${index} vs ${array.length}`);
+      array.push({
+        idx: array.length,
+        data: new ShallowSet()
+      });
     }
 
     if (index >= array.length) {
